@@ -8,11 +8,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class MemberDto {
-    private Long memberId;
-    private String loginId;
+    private Long memberSeq;
+    private String memberId;
     private String memberPwd;
     private String memberName;
     private String email;
     private String roleCode;
-
 }

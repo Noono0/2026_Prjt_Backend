@@ -15,7 +15,7 @@ public interface MemberMapper {
     List<MemberDto> findMembers(MemberSearchCondition condition);
     MemberDto findMemberById(Long memberId);
 
-    MemberDto findLoginMember(String username);
+    MemberDto findLoginMember(String memberId);
 
     MemberDto findIdCheck(MemberSaveRequest condition);
 

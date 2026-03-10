@@ -33,8 +33,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                 roleMenuMapper.findPermissionsByRoleCode(member.getRoleCode());
 
         return new CustomUserDetails(
+                member.getMemberSeq(),
                 member.getMemberId(),
-                member.getLoginId(),
                 member.getMemberPwd(),
                 member.getRoleCode(),
                 authorityBuilder.buildAuthorities(permissions)

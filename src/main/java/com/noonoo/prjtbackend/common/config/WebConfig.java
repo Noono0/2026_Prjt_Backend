@@ -1,6 +1,5 @@
 package com.noonoo.prjtbackend.common.config;
 
-;
 import com.noonoo.prjtbackend.common.interceptor.RequestContextInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

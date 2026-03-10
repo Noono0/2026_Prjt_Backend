@@ -1,12 +1,12 @@
 package com.noonoo.prjtbackend.member.serviceImpl;
 
+import com.noonoo.prjtbackend.common.config.RequestContext;
 import com.noonoo.prjtbackend.member.bean.MemberSearchCondition;
 import com.noonoo.prjtbackend.member.dto.MemberDto;
 import com.noonoo.prjtbackend.member.dto.MemberSaveRequest;
 import com.noonoo.prjtbackend.member.mapper.MemberMapper;
 import com.noonoo.prjtbackend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,90 +21,69 @@ public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
     private final PasswordEncoder passwordEncoder;
 
-    /**
-     * 회원 목록 조회
-     * MEMBER_READ 권한이 있는 사용자만 가능
-     */
     @Override
-    //@PreAuthorize("hasAuthority('MEMBER_READ')")
     public List<MemberDto> findMembers(MemberSearchCondition condition) {
         return memberMapper.findMembers(condition);
     }
 
-    /**
-     * 회원 상세 조회
-     * MEMBER_READ 권한이 있는 사용자만 가능
-     */
     @Override
-    //@PreAuthorize("hasAuthority('MEMBER_READ')")
     public MemberDto findMemberById(Long memberId) {
         return memberMapper.findMemberById(memberId);
     }
 
-    /**
-     * 회원가입 ID Check
-     *
-     */
     @Override
-    //@PreAuthorize("hasAuthority('MEMBER_READ')")
     public MemberDto findIdCheck(MemberSaveRequest condition) {
         return memberMapper.findIdCheck(condition);
     }
 
-    /**
-     * 회원 등록
-     * MEMBER_CREATE 권한이 있는 사용자만 가능
-     */
     @Override
-    //@PreAuthorize("hasAuthority('MEMBER_CREATE')")
     public Map<String, Object> createMember(MemberSaveRequest condition) {
-        Map<String, Object> resultMap = new HashMap();
-        // 비밀번호 해시 처리
+        Map<String, Object> resultMap = new HashMap<>();
+
+        String loginMemberId = RequestContext.getLoginMemberId();
+        String clientIp = RequestContext.getClientIp();
+
+        condition.setCreateId(loginMemberId != null ? loginMemberId : "SYSTEM");
+        condition.setModifyId(loginMemberId != null ? loginMemberId : "SYSTEM");
+        condition.setCreateIp(clientIp);
+        condition.setModifyIp(clientIp);
+
         condition.setMemberPwd(passwordEncoder.encode(condition.getMemberPwd()));
+
         int cnt = memberMapper.insertMember(condition);
-        resultMap.put("status", false);
-        resultMap.put("msg","fail");
-        if(cnt > 0) {
-            resultMap.put("status", true);
-            resultMap.put("msg","success");
-        }
 
+        resultMap.put("status", cnt > 0);
+        resultMap.put("msg", cnt > 0 ? "success" : "fail");
         return resultMap;
     }
 
-    /**
-     * 회원 수정
-     * MEMBER_UPDATE 권한이 있는 사용자만 가능
-     */
     @Override
-    //@PreAuthorize("hasAuthority('MEMBER_UPDATE')")
     public Map<String, Object> updateMember(MemberSaveRequest condition) {
-        Map<String, Object> resultMap = new HashMap();
-        int cnt = memberMapper.updateMember(condition);
-        resultMap.put("status", false);
-        resultMap.put("msg","fail");
-        if(cnt > 0) {
-            resultMap.put("status", true);
-            resultMap.put("msg","success");
+        Map<String, Object> resultMap = new HashMap<>();
+
+        String loginMemberId = RequestContext.getLoginMemberId();
+        String clientIp = RequestContext.getClientIp();
+
+        condition.setModifyId(loginMemberId != null ? loginMemberId : "SYSTEM");
+        condition.setModifyIp(clientIp);
+
+        if (condition.getMemberPwd() != null && !condition.getMemberPwd().isBlank()) {
+            condition.setMemberPwd(passwordEncoder.encode(condition.getMemberPwd()));
         }
+
+        int cnt = memberMapper.updateMember(condition);
+
+        resultMap.put("status", cnt > 0);
+        resultMap.put("msg", cnt > 0 ? "success" : "fail");
         return resultMap;
     }
 
-    /**
-     * 회원 삭제
-     * MEMBER_DELETE 권한이 있는 사용자만 가능
-     */
     @Override
-    //@PreAuthorize("hasAuthority('MEMBER_DELETE')")
     public Map<String, Object> deleteMember(MemberSaveRequest condition) {
-        Map<String, Object> resultMap = new HashMap();
+        Map<String, Object> resultMap = new HashMap<>();
         int cnt = memberMapper.deleteMember(condition);
-        resultMap.put("status", false);
-        resultMap.put("msg","fail");
-        if(cnt > 0) {
-            resultMap.put("status", true);
-            resultMap.put("msg","success");
-        }
+        resultMap.put("status", cnt > 0);
+        resultMap.put("msg", cnt > 0 ? "success" : "fail");
         return resultMap;
     }
 }
