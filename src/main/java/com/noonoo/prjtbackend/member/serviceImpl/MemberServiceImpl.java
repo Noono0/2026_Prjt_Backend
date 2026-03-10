@@ -7,6 +7,7 @@ import com.noonoo.prjtbackend.member.mapper.MemberMapper;
 import com.noonoo.prjtbackend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import java.util.Map;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper memberMapper;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 회원 목록 조회
@@ -57,6 +59,8 @@ public class MemberServiceImpl implements MemberService {
     //@PreAuthorize("hasAuthority('MEMBER_CREATE')")
     public Map<String, Object> createMember(MemberSaveRequest condition) {
         Map<String, Object> resultMap = new HashMap();
+        // 비밀번호 해시 처리
+        condition.setMemberPwd(passwordEncoder.encode(condition.getMemberPwd()));
         int cnt = memberMapper.insertMember(condition);
         resultMap.put("status", false);
         resultMap.put("msg","fail");
