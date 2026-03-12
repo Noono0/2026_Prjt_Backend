@@ -20,7 +20,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping
+    @PostMapping("/search")
     public ApiResponse<List<MemberDto>> findMembers(@RequestBody MemberSearchCondition condition) {
         log.info("findMembers controller 진입, request={}", condition);
         return ApiResponse.ok(memberService.findMembers(condition));

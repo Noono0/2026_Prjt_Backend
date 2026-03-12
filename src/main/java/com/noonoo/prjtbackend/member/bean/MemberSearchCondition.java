@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MemberSearchCondition {
-    private String loginId;
+    private String memberId;
     private String memberName;
     private String roleCode;
-    private String member_pwd;
+    private String status;
 }
