@@ -13,7 +13,7 @@ import java.util.Map;
 @Mapper
 public interface MemberMapper {
     List<MemberDto> findMembers(MemberSearchCondition condition);
-    MemberDto findMemberById(Long memberId);
+    MemberDto findMemberById(Long memberSeq);
 
     MemberDto findLoginMember(String memberId);
 

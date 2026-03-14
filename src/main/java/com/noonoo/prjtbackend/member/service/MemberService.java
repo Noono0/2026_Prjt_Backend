@@ -10,7 +10,7 @@ import java.util.Map;
 public interface MemberService {
     List<MemberDto> findMembers(MemberSearchCondition condition);
 
-    MemberDto findMemberById(Long memberId);
+    MemberDto findMemberDetail(Long memberSeq);
 
     MemberDto findIdCheck(MemberSaveRequest condition);
 

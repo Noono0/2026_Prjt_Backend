@@ -7,6 +7,7 @@ import com.noonoo.prjtbackend.member.dto.MemberSaveRequest;
 import com.noonoo.prjtbackend.member.mapper.MemberMapper;
 import com.noonoo.prjtbackend.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
@@ -27,8 +29,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto findMemberById(Long memberId) {
-        return memberMapper.findMemberById(memberId);
+    public MemberDto findMemberDetail(Long memberSeq) {
+        return memberMapper.findMemberById(memberSeq);
     }
 
     @Override
@@ -39,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Map<String, Object> createMember(MemberSaveRequest condition) {
         Map<String, Object> resultMap = new HashMap<>();
-
+        log.info("=======> /api/members/createMember serviceimpl param={}",condition);
         String loginMemberId = RequestContext.getLoginMemberId();
         String clientIp = RequestContext.getClientIp();
 

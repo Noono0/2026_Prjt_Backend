@@ -14,47 +14,61 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/members")
+@RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
 
+    /**
+     * 회원 목록 검색
+     */
     @PostMapping("/search")
-    public ApiResponse<List<MemberDto>> findMembers(@RequestBody MemberSearchCondition condition) {
-        log.info("findMembers controller 진입, request={}", condition);
-        return ApiResponse.ok(memberService.findMembers(condition));
+    public ApiResponse<List<MemberDto>> searchMembers(@RequestBody MemberSearchCondition request) {
+        log.info("=======> /api/members/search param={}",request);
+        List<MemberDto> list = memberService.findMembers(request);
+        return ApiResponse.ok("회원 목록 조회 완료", list);
     }
 
-    @GetMapping("/{memberId}")
-    public ApiResponse<MemberDto> findMember(@PathVariable Long memberId) {
-        log.info("findMember controller 진입, request={}", memberId);
-        return ApiResponse.ok(memberService.findMemberById(memberId));
+    /**
+     * 회원 상세 조회
+     */
+    @GetMapping("/detail/{memberSeq}")
+    public ApiResponse<MemberDto> findMemberDetail(@PathVariable Long memberSeq) {
+        log.info("=======> /api/members/detail param={}",memberSeq);
+        MemberDto detail = memberService.findMemberDetail(memberSeq);
+        return ApiResponse.ok("회원 상세 조회 완료", detail);
     }
 
-    @GetMapping("/findIdCheck")
-    public ApiResponse<MemberDto> findIdCheck(@RequestBody MemberSaveRequest condition) {
-        log.info("findIdCheck controller 진입, request={}", condition);
-        return ApiResponse.ok(memberService.findIdCheck(condition));
+    /**
+     * 회원 등록
+     */
+    @PostMapping("/create")
+    public ApiResponse<Void> createMember(@RequestBody MemberSaveRequest request) {
+        log.info("=======> /api/members/create param={}",request);
+        memberService.createMember(request);
+        return ApiResponse.ok("회원 등록 완료", null);
     }
 
-    @PostMapping("/createMember")
-    public ApiResponse<Map<String, Object>> createMember(@RequestBody MemberSaveRequest condition) {
-        log.info("createMember controller 진입, request={}", condition);
-        return ApiResponse.ok(memberService.createMember(condition));
+    /**
+     * 회원 수정
+     */
+    @PutMapping("/update")
+    public ApiResponse<Void> updateMember(@RequestBody MemberSaveRequest request) {
+        log.info("=======> /api/members/updateMember param={}",request);
+        memberService.updateMember(request);
+        return ApiResponse.ok("회원 수정 완료", null);
     }
 
-    @PutMapping("/updateMember")
-    public ApiResponse<Map<String, Object>> updateMember(@RequestBody MemberSaveRequest condition) {
-        log.info("updateMember controller 진입, request={}", condition);
-        return ApiResponse.ok(memberService.updateMember(condition));
+    /**
+     * 회원 삭제
+     */
+    @DeleteMapping("/delete/{memberSeq}")
+    public ApiResponse<Void> deleteMember(@RequestBody MemberSaveRequest request) {
+        log.info("=======> /api/members/delete param={}",request);
+        memberService.deleteMember(request);
+        return ApiResponse.ok("회원 삭제 완료", null);
     }
-
-    @DeleteMapping("/deleteMember")
-    public ApiResponse<Map<String, Object>> deleteMember(@RequestBody MemberSaveRequest condition) {
-        log.info("deleteMember controller 진입, request={}", condition);
-        return ApiResponse.ok(memberService.deleteMember(condition));
-    }
-
-
 }
+
+
