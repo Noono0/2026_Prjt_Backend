@@ -1,7 +1,8 @@
 package com.noonoo.prjtbackend.member.controller;
 
 import com.noonoo.prjtbackend.common.api.ApiResponse;
-import com.noonoo.prjtbackend.member.bean.MemberSearchCondition;
+import com.noonoo.prjtbackend.common.paging.PageResponse;
+import com.noonoo.prjtbackend.member.dto.MemberSearchCondition;
 import com.noonoo.prjtbackend.member.dto.MemberDto;
 import com.noonoo.prjtbackend.member.dto.MemberSaveRequest;
 import com.noonoo.prjtbackend.member.service.MemberService;
@@ -10,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -24,10 +24,10 @@ public class MemberController {
      * 회원 목록 검색
      */
     @PostMapping("/search")
-    public ApiResponse<List<MemberDto>> searchMembers(@RequestBody MemberSearchCondition request) {
-        log.info("=======> /api/members/search param={}",request);
-        List<MemberDto> list = memberService.findMembers(request);
-        return ApiResponse.ok("회원 목록 조회 완료", list);
+    public ApiResponse<PageResponse<MemberDto>> searchMembers(@RequestBody MemberSearchCondition request) {
+        log.info("=======> /api/members/search param={}", request);
+        PageResponse<MemberDto> result = memberService.findMembers(request);
+        return ApiResponse.ok("회원 목록 조회 완료", result);
     }
 
     /**

@@ -1,7 +1,9 @@
 package com.noonoo.prjtbackend.member.serviceImpl;
 
 import com.noonoo.prjtbackend.common.config.RequestContext;
-import com.noonoo.prjtbackend.member.bean.MemberSearchCondition;
+import com.noonoo.prjtbackend.common.paging.PageResponse;
+import com.noonoo.prjtbackend.common.paging.PagingUtils;
+import com.noonoo.prjtbackend.member.dto.MemberSearchCondition;
 import com.noonoo.prjtbackend.member.dto.MemberDto;
 import com.noonoo.prjtbackend.member.dto.MemberSaveRequest;
 import com.noonoo.prjtbackend.member.mapper.MemberMapper;
@@ -24,8 +26,11 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public List<MemberDto> findMembers(MemberSearchCondition condition) {
-        return memberMapper.findMembers(condition);
+    public PageResponse<MemberDto> findMembers(MemberSearchCondition condition) {
+        long totalCount = memberMapper.findMembersCnt(condition);
+        List<MemberDto> items = memberMapper.findMembers(condition);
+
+        return PagingUtils.toPageResponse(condition, totalCount, items);
     }
 
     @Override

@@ -1,14 +1,14 @@
 package com.noonoo.prjtbackend.member.service;
 
-import com.noonoo.prjtbackend.member.bean.MemberSearchCondition;
+import com.noonoo.prjtbackend.common.paging.PageResponse;
+import com.noonoo.prjtbackend.member.dto.MemberSearchCondition;
 import com.noonoo.prjtbackend.member.dto.MemberDto;
 import com.noonoo.prjtbackend.member.dto.MemberSaveRequest;
 
-import java.util.List;
 import java.util.Map;
 
 public interface MemberService {
-    List<MemberDto> findMembers(MemberSearchCondition condition);
+    PageResponse<MemberDto> findMembers(MemberSearchCondition condition);
 
     MemberDto findMemberDetail(Long memberSeq);
 

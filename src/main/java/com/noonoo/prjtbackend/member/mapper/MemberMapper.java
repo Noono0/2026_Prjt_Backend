@@ -1,18 +1,19 @@
 package com.noonoo.prjtbackend.member.mapper;
 
-import com.noonoo.prjtbackend.member.bean.MemberSearchCondition;
+import com.noonoo.prjtbackend.common.paging.PageResponse;
+import com.noonoo.prjtbackend.member.dto.MemberSearchCondition;
 import com.noonoo.prjtbackend.member.dto.MemberDto;
-import com.noonoo.prjtbackend.member.dto.MemberLoginDto;
 import com.noonoo.prjtbackend.member.dto.MemberSaveRequest;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface MemberMapper {
     List<MemberDto> findMembers(MemberSearchCondition condition);
+
+    long findMembersCnt(MemberSearchCondition condition);
+
     MemberDto findMemberById(Long memberSeq);
 
     MemberDto findLoginMember(String memberId);

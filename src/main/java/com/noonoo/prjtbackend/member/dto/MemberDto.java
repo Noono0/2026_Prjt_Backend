@@ -12,6 +12,15 @@ public class MemberDto {
     private String memberId;
     private String memberPwd;
     private String memberName;
+    private String birthYmd;
     private String email;
+    private String gender;
+    private String phone;
+    private String region;
     private String roleCode;
+    private String roleName;
+    private String status;
+    private String createDt;
+    private String modifyDt;
+    private String lastLoginAt;
 }
